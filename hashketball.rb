@@ -127,3 +127,94 @@ def game_hash
 end
 
 # Write code here
+def all_players
+  game_hash[:home][:players].concat(game_hash[:away][:players]) 
+end
+
+# def num_points_scored(player_name)
+#  game_hash.each do |home_or_away, team_hash|
+#   team_hash[:players].each do |player_hash|
+#     if player_hash[:player_name] == player_name
+#       return player_hash[:points]
+#     end
+#   end
+# end
+
+# refactoring for the above code
+# def num_points_scored
+#   game_hash.each do |home_or_away, team_has|
+#     player = team_has[:players].find { |player_hash| player_hash[:player_name] == player_name }
+#         return player ? player[:points] : player 
+#     end
+#   end
+# end
+
+#with helper methods
+# def players
+#   game_hash[:home][:players].concat(game_hash[:away][:players])
+# end
+
+# def num_points_scored(player_name)
+#player = players.find {|player_hash | player_hash[:player_name] == player_name}
+#return player[:points] if !!player
+
+# OR
+
+ def find_by_name(player_name)
+   all_players.find {|player_hash| player_hash[:player_name] == player_name} 
+ end
+
+  # def num_points_scored(player_name)
+#   player = find_by_name(player_name)
+#   return player&.fetch(:points)
+# end
+
+def num_points_scored(player_name)
+  player = player_stats(player_name)
+  return player[:points]
+end
+
+def shoe_size(player_name)
+  player = player_stats(player_name)
+  return player[:shoe]
+end
+
+def team_colors(team_name)
+  game_hash.each do |home_or_away, team_hash|
+    if team_hash[:team_name] == team_name
+      return team_hash[:colors]
+  end
+end
+end
+
+
+ def big_shoe_rebounds
+  all_players.max_by {|player| player[:shoe]}[:rebounds]
+end
+
+   # or 
+
+# def big_shoe_rebounds
+#   players.max_by {|player| player[:shoe]}.fetch(:rebounds)
+# end
+
+def player_stats(player_name)
+  all_players.find {|player| player[:player_name] == player_name }
+end
+
+   #since player_stats and find_by_name technically the same, you can just replace all "find_by_name(player_name)"" to "player_stats(player_name)"
+# def player_stats(player_name)
+#   players.find { |player_name| player_hash[:player_name] == player_name }
+# end
+
+def team_names
+     [game_hash[:home][:team_name], game_hash[:away][:team_name]]
+   end
+
+   def player_numbers(team_name)
+    game_hash.each do |home_or_away, team_hash|
+      if team_hash[:team_name] == team_name
+        return team_hash[:players].map {|player| player[:number]}
+      end
+    end
+  end
